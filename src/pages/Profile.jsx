@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getUser, getPosts, getProfile, saveProfile } from '../utils/storage';
 import PostCard from '../components/PostCard';
-import BottomNav from '../components/BottomNav';
+
 import { Edit2, Check } from 'lucide-react';
 
 export default function Profile() {
