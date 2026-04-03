@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react';
 import { getPosts } from '../utils/storage';
 import PostCard from '../components/PostCard';
 import CreatePost from '../components/CreatePost';
-import BottomNav from '../components/BottomNav';
+
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
