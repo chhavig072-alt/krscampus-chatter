@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getPosts } from '../utils/storage';
 import PostCard from '../components/PostCard';
-import BottomNav from '../components/BottomNav';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
@@ -86,7 +86,7 @@ export default function Explore() {
         )}
       </AnimatePresence>
 
-      <BottomNav />
+      
     </div>
   );
 }

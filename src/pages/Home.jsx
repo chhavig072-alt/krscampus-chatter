@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react';
 import { getPosts } from '../utils/storage';
 import PostCard from '../components/PostCard';
 import CreatePost from '../components/CreatePost';
-import BottomNav from '../components/BottomNav';
+
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -40,7 +40,7 @@ export default function Home() {
       </div>
 
       <CreatePost open={showCreate} onClose={() => setShowCreate(false)} onCreated={loadPosts} />
-      <BottomNav />
+      
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Heart, MessageCircle, BarChart3, Trash2 } from 'lucide-react';
 import { getUser } from '../utils/storage';
-import BottomNav from '../components/BottomNav';
+
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NOTIF_KEY = 'krmu_notifications';
@@ -141,7 +141,7 @@ export default function Notifications() {
         </AnimatePresence>
       </div>
 
-      <BottomNav />
+      
     </div>
   );
 }
