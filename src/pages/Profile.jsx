@@ -7,6 +7,8 @@ export default function Profile() {
   const user = getUser();
   const [posts, setPosts] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
   const [bio, setBio] = useState('');
   const [department, setDepartment] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
