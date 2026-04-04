@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Heart, MessageCircle, BarChart3, Trash2 } from 'lucide-react';
-import { getUser, getPosts, savePosts } from '../utils/storage';
+import { Heart, MessageCircle, BarChart3, Trash2, UserPlus, UserCheck } from 'lucide-react';
+import { getUser, getPosts, savePosts, isFollowing, followUser, unfollowUser } from '../utils/storage';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function timeAgo(timestamp) {
