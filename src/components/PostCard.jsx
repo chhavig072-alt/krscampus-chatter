@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, MessageCircle, BarChart3 } from 'lucide-react';
+import { Heart, MessageCircle, BarChart3, Trash2 } from 'lucide-react';
 import { getUser, getPosts, savePosts } from '../utils/storage';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -66,6 +66,14 @@ export default function PostCard({ post, onUpdate }) {
     onUpdate();
   };
 
+  const handleDelete = () => {
+    if (!user) return;
+    const posts = getPosts().filter((p) => p.id !== post.id);
+    savePosts(posts);
+    onUpdate();
+  };
+
+  const isOwner = user && post.email === user.email;
   const hasVoted = user && post.poll && post.poll.options.some((o) => o.votes.includes(user.email));
 
   return (
@@ -84,6 +92,11 @@ export default function PostCard({ post, onUpdate }) {
           <p className="font-semibold text-sm text-foreground">{post.username}</p>
           <p className="text-xs text-muted-foreground">{timeAgo(post.createdAt)}</p>
         </div>
+        {isOwner && (
+          <button onClick={handleDelete} className="text-muted-foreground hover:text-destructive transition-all duration-200 hover:scale-110 active:scale-90 p-1">
+            <Trash2 size={16} />
+          </button>
+        )}
       </div>
 
       {/* Image */}
