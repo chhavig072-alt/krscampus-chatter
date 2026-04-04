@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getUser, getPosts, getProfile, saveProfile } from '../utils/storage';
 import PostCard from '../components/PostCard';
-
-import { Edit2, Check } from 'lucide-react';
+import { Edit2, Check, FileText, Heart, Camera, Link } from 'lucide-react';
 
 export default function Profile() {
   const user = getUser();
@@ -11,6 +10,8 @@ export default function Profile() {
   const [bio, setBio] = useState('');
   const [department, setDepartment] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [photoMode, setPhotoMode] = useState('file');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (!user) return;
@@ -33,6 +34,16 @@ export default function Profile() {
     setEditing(false);
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
   if (!user) return null;
 
   return (
@@ -51,16 +62,32 @@ export default function Profile() {
       </div>
 
       <div className="max-w-lg mx-auto px-4 pt-6 pb-20">
-        {/* Profile card */}
         <div className="bg-card rounded-3xl border border-border p-6 mb-6">
           <div className="flex items-center gap-4 mb-4">
-            {photoUrl ? (
-              <img src={photoUrl} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
-            ) : (
-              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary text-2xl font-bold">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
-            )}
+            <div className="relative group">
+              {photoUrl ? (
+                <img src={photoUrl} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary text-2xl font-bold">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+              {editing && (
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Camera size={20} className="text-white" />
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+            </div>
             <div>
               <h2 className="text-lg font-bold text-foreground font-sans">{user.name}</h2>
               <p className="text-sm text-muted-foreground">{user.email}</p>
@@ -71,8 +98,31 @@ export default function Profile() {
           {editing ? (
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Profile Photo URL</label>
-                <input value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} placeholder="https://..." className="input-field text-sm" />
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Profile Photo</label>
+                <div className="flex gap-2 mb-2">
+                  <button
+                    onClick={() => setPhotoMode('file')}
+                    className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border transition-colors ${photoMode === 'file' ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
+                  >
+                    <Camera size={14} /> Upload
+                  </button>
+                  <button
+                    onClick={() => setPhotoMode('url')}
+                    className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border transition-colors ${photoMode === 'url' ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
+                  >
+                    <Link size={14} /> URL
+                  </button>
+                </div>
+                {photoMode === 'file' ? (
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full text-sm py-2 rounded-xl border border-dashed border-border text-muted-foreground hover:bg-accent transition-colors"
+                  >
+                    {photoUrl && photoUrl.startsWith('data:') ? '✓ Photo selected — click to change' : 'Choose photo from device'}
+                  </button>
+                ) : (
+                  <input value={photoUrl.startsWith('data:') ? '' : photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} placeholder="https://..." className="input-field text-sm" />
+                )}
               </div>
               <div>
                 <label className="text-xs font-medium text-muted-foreground mb-1 block">Bio</label>
@@ -92,28 +142,35 @@ export default function Profile() {
           )}
 
           <div className="flex gap-6 mt-4 pt-4 border-t border-border">
-            <div className="text-center">
-              <p className="text-lg font-bold text-foreground">{posts.length}</p>
-              <p className="text-xs text-muted-foreground">Posts</p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <FileText size={16} className="text-primary" />
+              </div>
+              <div>
+                <p className="text-lg font-bold text-foreground leading-none">{posts.length}</p>
+                <p className="text-xs text-muted-foreground">Posts</p>
+              </div>
             </div>
-            <div className="text-center">
-              <p className="text-lg font-bold text-foreground">
-                {posts.reduce((sum, p) => sum + p.likes.length, 0)}
-              </p>
-              <p className="text-xs text-muted-foreground">Likes</p>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
+                <Heart size={16} className="text-destructive" />
+              </div>
+              <div>
+                <p className="text-lg font-bold text-foreground leading-none">
+                  {posts.reduce((sum, p) => sum + p.likes.length, 0)}
+                </p>
+                <p className="text-xs text-muted-foreground">Likes</p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* User posts */}
         <p className="text-sm font-semibold text-muted-foreground mb-3">Your Posts</p>
         {posts.length === 0 && <p className="text-sm text-muted-foreground">You haven't posted anything yet.</p>}
         {posts.map((post) => (
           <PostCard key={post.id} post={post} onUpdate={loadPosts} />
         ))}
       </div>
-
-      
     </div>
   );
 }
