@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { X, Image, BarChart3, Plus, Minus } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { X, Image, BarChart3, Plus, Minus, Upload, Link } from 'lucide-react';
 import { getUser, getPosts, savePosts } from '../utils/storage';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -8,8 +8,18 @@ export default function CreatePost({ open, onClose, onCreated }) {
   const [imageUrl, setImageUrl] = useState('');
   const [showPoll, setShowPoll] = useState(false);
   const [pollOptions, setPollOptions] = useState(['', '']);
+  const [imageMode, setImageMode] = useState('file');
+  const fileInputRef = useRef(null);
 
   const user = getUser();
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => setImageUrl(reader.result);
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = () => {
     if (!user || !caption.trim()) return;
@@ -40,6 +50,7 @@ export default function CreatePost({ open, onClose, onCreated }) {
     setImageUrl('');
     setShowPoll(false);
     setPollOptions(['', '']);
+    setImageMode('file');
     onCreated();
     onClose();
   };
@@ -89,12 +100,49 @@ export default function CreatePost({ open, onClose, onCreated }) {
               className="input-field resize-none mb-3"
             />
 
-            <input
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="Image URL (optional)"
-              className="input-field mb-3 text-sm"
-            />
+            {/* Image section */}
+            <div className="mb-3">
+              <div className="flex gap-2 mb-2">
+                <button
+                  onClick={() => setImageMode('file')}
+                  className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border transition-colors ${imageMode === 'file' ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
+                >
+                  <Upload size={14} /> Upload
+                </button>
+                <button
+                  onClick={() => setImageMode('url')}
+                  className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border transition-colors ${imageMode === 'url' ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:bg-accent'}`}
+                >
+                  <Link size={14} /> URL
+                </button>
+              </div>
+              {imageMode === 'file' ? (
+                <>
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full text-sm py-2 rounded-xl border border-dashed border-border text-muted-foreground hover:bg-accent transition-colors"
+                  >
+                    {imageUrl && imageUrl.startsWith('data:') ? '✓ Image selected — click to change' : 'Choose image from device'}
+                  </button>
+                </>
+              ) : (
+                <input
+                  value={imageUrl.startsWith('data:') ? '' : imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="Image URL (optional)"
+                  className="input-field text-sm"
+                />
+              )}
+              {imageUrl && (
+                <div className="mt-2 relative rounded-xl overflow-hidden">
+                  <img src={imageUrl} alt="Preview" className="w-full max-h-48 object-cover rounded-xl" />
+                  <button onClick={() => setImageUrl('')} className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1">
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div className="flex gap-2 mb-4">
               <button
