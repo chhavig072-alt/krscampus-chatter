@@ -1,5 +1,6 @@
-import { Home, Search, Bell, User, LogOut } from 'lucide-react';
+import { Home, Search, Bell, User, LogOut, Moon, Sun } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { clearUser } from '../utils/storage';
 import {
   Sidebar,
@@ -27,6 +28,15 @@ export default function AppSidebar() {
   const navigate = useNavigate();
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
+
+  const [dark, setDark] = useState(() => {
+    return localStorage.getItem('krmu_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+    localStorage.setItem('krmu_theme', dark ? 'dark' : 'light');
+  }, [dark]);
 
   const handleLogout = () => {
     clearUser();
@@ -71,6 +81,15 @@ export default function AppSidebar() {
 
       <SidebarFooter className="p-2">
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip={dark ? 'Light mode' : 'Dark mode'}
+              onClick={() => setDark(!dark)}
+            >
+              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {!collapsed && <span>{dark ? 'Light mode' : 'Dark mode'}</span>}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Logout"
