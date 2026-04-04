@@ -1,4 +1,4 @@
-import { Home, Search, Bell, User, LogOut, Moon, Sun } from 'lucide-react';
+import { Home, Search, Bell, User, LogOut, Moon, Sun, Sparkles } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { clearUser } from '../utils/storage';
@@ -23,20 +23,34 @@ const navItems = [
   { title: 'Profile', path: '/profile', icon: User },
 ];
 
+const themes = [
+  { key: 'light', label: 'Light', icon: Sun },
+  { key: 'dark', label: 'Dark', icon: Moon },
+  { key: 'gradient', label: 'Gradient', icon: Sparkles },
+];
+
 export default function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
 
-  const [dark, setDark] = useState(() => {
-    return localStorage.getItem('krmu_theme') === 'dark';
-  });
+  const [theme, setTheme] = useState(() => localStorage.getItem('krmu_theme') || 'light');
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark);
-    localStorage.setItem('krmu_theme', dark ? 'dark' : 'light');
-  }, [dark]);
+    const root = document.documentElement;
+    root.classList.remove('dark', 'gradient');
+    if (theme !== 'light') root.classList.add(theme);
+    localStorage.setItem('krmu_theme', theme);
+  }, [theme]);
+
+  const cycleTheme = () => {
+    const idx = themes.findIndex((t) => t.key === theme);
+    setTheme(themes[(idx + 1) % themes.length].key);
+  };
+
+  const currentTheme = themes.find((t) => t.key === theme) || themes[0];
+  const ThemeIcon = currentTheme.icon;
 
   const handleLogout = () => {
     clearUser();
@@ -83,11 +97,11 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              tooltip={dark ? 'Light mode' : 'Dark mode'}
-              onClick={() => setDark(!dark)}
+              tooltip={`Theme: ${currentTheme.label}`}
+              onClick={cycleTheme}
             >
-              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              {!collapsed && <span>{dark ? 'Light mode' : 'Dark mode'}</span>}
+              <ThemeIcon className="h-4 w-4" />
+              {!collapsed && <span>{currentTheme.label} mode</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
