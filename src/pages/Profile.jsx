@@ -24,6 +24,8 @@ export default function Profile() {
       setPhotoUrl(profile.photoUrl || '');
     }
     setPosts(getPosts().filter((p) => p.email === user.email));
+    setFollowers(getFollowersCount(user.email));
+    setFollowing(getFollowingCount(user.email));
   }, []);
 
   const loadPosts = () => {
