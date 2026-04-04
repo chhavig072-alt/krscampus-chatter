@@ -66,6 +66,14 @@ export default function PostCard({ post, onUpdate }) {
     onUpdate();
   };
 
+  const handleDelete = () => {
+    if (!user) return;
+    const posts = getPosts().filter((p) => p.id !== post.id);
+    savePosts(posts);
+    onUpdate();
+  };
+
+  const isOwner = user && post.email === user.email;
   const hasVoted = user && post.poll && post.poll.options.some((o) => o.votes.includes(user.email));
 
   return (
