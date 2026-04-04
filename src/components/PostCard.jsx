@@ -92,6 +92,11 @@ export default function PostCard({ post, onUpdate }) {
           <p className="font-semibold text-sm text-foreground">{post.username}</p>
           <p className="text-xs text-muted-foreground">{timeAgo(post.createdAt)}</p>
         </div>
+        {isOwner && (
+          <button onClick={handleDelete} className="text-muted-foreground hover:text-destructive transition-all duration-200 hover:scale-110 active:scale-90 p-1">
+            <Trash2 size={16} />
+          </button>
+        )}
       </div>
 
       {/* Image */}
