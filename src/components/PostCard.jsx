@@ -142,16 +142,16 @@ export default function PostCard({ post, onUpdate }) {
 
       {/* Actions */}
       <div className="flex items-center gap-4 px-4 py-3">
-        <button onClick={handleLike} className="flex items-center gap-1.5 transition-colors">
+        <button onClick={handleLike} className="flex items-center gap-1.5 transition-all duration-200 hover:scale-110 active:scale-90">
           <Heart
             size={20}
-            className={isLiked ? 'fill-primary text-primary' : 'text-muted-foreground'}
+            className={`transition-all duration-300 ${isLiked ? 'fill-primary text-primary drop-shadow-[0_0_6px_hsl(var(--primary)/0.5)]' : 'text-muted-foreground hover:text-primary/60'}`}
           />
           <span className="text-sm text-muted-foreground">{post.likes.length}</span>
         </button>
         <button
           onClick={() => setShowComments(!showComments)}
-          className="flex items-center gap-1.5 text-muted-foreground"
+          className="flex items-center gap-1.5 text-muted-foreground transition-all duration-200 hover:scale-110 hover:text-primary/60 active:scale-90"
         >
           <MessageCircle size={20} />
           <span className="text-sm">{post.comments.length}</span>
