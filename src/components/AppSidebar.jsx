@@ -1,4 +1,4 @@
-import { Home, Search, Bell, User, LogOut, Moon, Sun, Sparkles } from 'lucide-react';
+import { Home, Search, Bell, User, LogOut, Moon, Sun, Sparkles, Users } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { clearUser } from '../utils/storage';
