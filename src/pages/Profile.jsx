@@ -172,24 +172,24 @@ export default function Profile() {
                 <p className="text-xs text-muted-foreground">Likes</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <button onClick={() => setFollowModal({ open: true, tab: 'followers' })} className="flex items-center gap-2 hover:bg-secondary/50 rounded-xl px-2 py-1 transition-colors">
               <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
                 <Users size={16} className="text-secondary-foreground" />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-lg font-bold text-foreground leading-none">{followers}</p>
                 <p className="text-xs text-muted-foreground">Followers</p>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
+            </button>
+            <button onClick={() => setFollowModal({ open: true, tab: 'following' })} className="flex items-center gap-2 hover:bg-accent/50 rounded-xl px-2 py-1 transition-colors">
               <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
                 <UserPlus size={16} className="text-accent-foreground" />
               </div>
-              <div>
+              <div className="text-left">
                 <p className="text-lg font-bold text-foreground leading-none">{following}</p>
                 <p className="text-xs text-muted-foreground">Following</p>
               </div>
-            </div>
+            </button>
           </div>
         </div>
 
