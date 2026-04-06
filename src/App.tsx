@@ -10,6 +10,8 @@ import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
+import Communities from "./pages/Communities";
+import CommunityDetail from "./pages/CommunityDetail";
 import NotFound from "./pages/NotFound";
 
 initializePosts();
