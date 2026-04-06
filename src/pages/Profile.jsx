@@ -199,6 +199,13 @@ export default function Profile() {
           <PostCard key={post.id} post={post} onUpdate={loadPosts} />
         ))}
       </div>
+
+      <FollowListModal
+        open={followModal.open}
+        onOpenChange={(open) => { setFollowModal((m) => ({ ...m, open })); if (!open) loadPosts(); }}
+        userEmail={user.email}
+        defaultTab={followModal.tab}
+      />
     </div>
   );
 }
