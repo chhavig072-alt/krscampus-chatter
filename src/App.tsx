@@ -10,6 +10,8 @@ import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
+import Communities from "./pages/Communities";
+import CommunityDetail from "./pages/CommunityDetail";
 import NotFound from "./pages/NotFound";
 
 initializePosts();
@@ -47,6 +49,8 @@ function AnimatedRoutes() {
         <Route path="/explore" element={<ProtectedRoute><AppLayout><PageTransition><Explore /></PageTransition></AppLayout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><AppLayout><PageTransition><Profile /></PageTransition></AppLayout></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><AppLayout><PageTransition><Notifications /></PageTransition></AppLayout></ProtectedRoute>} />
+        <Route path="/communities" element={<ProtectedRoute><AppLayout><PageTransition><Communities /></PageTransition></AppLayout></ProtectedRoute>} />
+        <Route path="/communities/:id" element={<ProtectedRoute><AppLayout><PageTransition><CommunityDetail /></PageTransition></AppLayout></ProtectedRoute>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>

@@ -1,4 +1,4 @@
-import { Home, Search, Bell, User, LogOut, Moon, Sun, Sparkles } from 'lucide-react';
+import { Home, Search, Bell, User, LogOut, Moon, Sun, Sparkles, Users } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { clearUser } from '../utils/storage';
@@ -19,6 +19,7 @@ import {
 const navItems = [
   { title: 'Home', path: '/', icon: Home },
   { title: 'Explore', path: '/explore', icon: Search },
+  { title: 'Communities', path: '/communities', icon: Users },
   { title: 'Alerts', path: '/notifications', icon: Bell },
   { title: 'Profile', path: '/profile', icon: User },
 ];
