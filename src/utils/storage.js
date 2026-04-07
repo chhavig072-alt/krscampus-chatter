@@ -33,6 +33,14 @@ export function savePosts(posts) {
   localStorage.setItem(KEYS.POSTS, JSON.stringify(posts));
 }
 
+export function getAllProfiles() {
+  try {
+    return JSON.parse(localStorage.getItem(KEYS.PROFILES)) || {};
+  } catch {
+    return {};
+  }
+}
+
 export function getProfile(email) {
   try {
     const profiles = JSON.parse(localStorage.getItem(KEYS.PROFILES)) || {};
